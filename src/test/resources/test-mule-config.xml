@@ -1,0 +1,11 @@
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:cali-lang-mule="http://www.mulesoft.org/schema/mule/cali-lang-mule" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/cali-lang-mule http://www.mulesoft.org/schema/mule/cali-lang-mule/current/mule-cali-lang-mule.xsd">
+
+    <cali-lang-mule:config name="config" configId="configId">
+        <cali-lang-mule:connection requiredParameter="aValue" />
+    </cali-lang-mule:config>
+
+</mule>
