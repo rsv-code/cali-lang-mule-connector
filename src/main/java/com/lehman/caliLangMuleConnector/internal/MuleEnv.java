@@ -26,17 +26,39 @@ import com.cali.Environment;
 import com.cali.types.CaliString;
 import com.cali.types.CaliType;
 
+/**
+ * This class provides the functions needed from the global 
+ * env object availble in a cali-lang script. 
+ * @author Austin Lehman
+ */
 public class MuleEnv {
 	private ConfigurationProperties configurationProperties = null;
 
+	/**
+	 * Gets the Mule ConfigurationProperties object.
+	 * @return A Mule ConfigurationProperties object.
+	 */
 	public ConfigurationProperties getConfigurationProperties() {
 		return configurationProperties;
 	}
 
+	/**
+	 * Sets the Mule ConfigurationProperties object.
+	 * @param configurationProperties is a Mule ConfigurationProperties 
+	 * object to set.
+	 */
 	public void setConfigurationProperties(ConfigurationProperties configurationProperties) {
 		this.configurationProperties = configurationProperties;
 	}
 	
+	/**
+	 * This is the implementation of the env.p() function call which 
+	 * will attempt to find the config property with the provided name.
+	 * @param env is the cali-lang Environment object.
+	 * @param args is an ArrayList with the function args.
+	 * @return A CaliType object of type CaliString with the property 
+	 * value or a blank string if not found.
+	 */
 	public CaliType p(Environment env, ArrayList<CaliType> args) {
 		String ret = "";
 		CaliString key = (CaliString) args.get(0);

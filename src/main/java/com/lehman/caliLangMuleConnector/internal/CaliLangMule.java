@@ -45,6 +45,10 @@ import com.cali.types.CaliType;
 import com.cali.types.CaliTypeObjectInt;
 import com.cali.types.Members;
 
+/**
+ * The Cali-Lang Mule Connector implementation.
+ * @author Austin Lehman
+ */
 public class CaliLangMule extends Engine {
 	private static Logger log = LogManager.getLogger(CaliLangMule.class.getName());
 	
@@ -53,20 +57,41 @@ public class CaliLangMule extends Engine {
 	 */
 	private String scriptFileName = "";
 	
+	/**
+	 * The Mule ConfigurationProperties object.
+	 */
 	private ConfigurationProperties configurationProperties = null;
+	
+	/**
+	 * The current Mule Message object.
+	 */
 	private Message message = null;
+	
+	/**
+	 * The current Mule Variables map.
+	 */
 	private Map<String, Object> variables = new HashMap<String, Object>();
+	
+	/**
+	 * The Logger name string which is set in the log4j2.xml file 
+	 * or a blank string if not set.
+	 */
 	private String loggerStr = "";
 
 	/**
-	 * Default constructor takes the cali-lang script file name.
+	 * Default constructor takes the cali-lang script file name, ConfigurationProperties
+	 * object, Message, Variables, and Logger String.
 	 * @param ScriptFileName is a String with the
 	 * cali-lang script file to run.
+	 * @param ConfigurationProps is the Mule ConfigurationProperties object.
+	 * @param Mess is the current Mule Message object.
+	 * @param Vars is a Map with the current Mule variables.
+	 * @param LoggerStr is a String with the Logger name set in log4j2.xml.
 	 * @throws Exception
 	 */
 	public CaliLangMule(
 			String ScriptFileName,
-			ConfigurationProperties ConfigurationProperties, 
+			ConfigurationProperties ConfigurationProps, 
 			Message Mess, 
 			Map<String, Object> Vars,
 			String LoggerStr
@@ -75,12 +100,18 @@ public class CaliLangMule extends Engine {
 		this.setDebug(true);
 		this.addIncludePath("./");
 		
-		this.configurationProperties = ConfigurationProperties;
+		this.configurationProperties = ConfigurationProps;
 		this.message = Mess;
 		this.variables = Vars;
 		this.loggerStr = LoggerStr;
 	}
 
+	/**
+	 * Executes the script and returns the result as a JSON encoded 
+	 * string.
+	 * @return A String with the result JSON encoded.
+	 * @throws Exception
+	 */
 	public String runScript() throws Exception {
 		String scriptFile = Util.loadFile(this.scriptFileName);
 		
@@ -94,6 +125,12 @@ public class CaliLangMule extends Engine {
 		}
 	}
 
+	/**
+	 * Gets the main class and returns it, and returns null if 
+	 * not found.
+	 * @return An astClass instance with the main class, or null 
+	 * if not found.
+	 */
 	private astClass getMainClass() {
 		astClass ret = null;
 
@@ -109,6 +146,13 @@ public class CaliLangMule extends Engine {
 		return ret;
 	}
 
+	/**
+	 * Runs the provided main class.
+	 * @param cls is an astClass object with the main function 
+	 * to run.
+	 * @return A JSON encoded String.
+	 * @throws Exception
+	 */
 	private String runClass(astClass cls) throws Exception {
         CallStack callStack = new CallStack();
         Environment tenv = new Environment(this);
@@ -196,6 +240,11 @@ public class CaliLangMule extends Engine {
 		}
 	}
 	
+	/**
+	 * Sets up the logger with the provided Environment.
+	 * @param tenv is the Environment object to use.
+	 * @throws Exception
+	 */
 	private void setupLogger(Environment tenv) throws Exception {
 		// Create the log and add parse it.
 		this.createLogObject();
@@ -213,6 +262,11 @@ public class CaliLangMule extends Engine {
         }
     }
 	
+	/**
+	 * Creates a String with the logger class and then 
+	 * calls the parse function to add it to the Engine.
+	 * @throws Exception
+	 */
 	private void createLogObject() throws Exception {
 		String clsStr = ""
 			+ "static extern class log : com.lehman.caliLangMuleConnector.internal.CaliLangLogger {" + "\n"
@@ -237,6 +291,11 @@ public class CaliLangMule extends Engine {
 		this.parseString("log.ca", clsStr);
 	}
 	
+	/**
+	 * Sets up the env singleton with the provided Environment.
+	 * @param tenv is the Environment object to use.
+	 * @throws Exception
+	 */
 	private void setupEnv(Environment tenv) throws Exception {
 		// Create the env and add parse it.
 		this.createEnvObject();
@@ -256,6 +315,11 @@ public class CaliLangMule extends Engine {
         }
     }
 	
+	/**
+	 * Creates a String with the env class and then 
+	 * calls the parse function to add it to the Engine.
+	 * @throws Exception
+	 */
 	private void createEnvObject() throws Exception {
 		String clsStr = ""
 			+ "static extern class env : com.lehman.caliLangMuleConnector.internal.MuleEnv {" + "\n"
@@ -277,7 +341,14 @@ public class CaliLangMule extends Engine {
 		
 		this.parseString("env.ca", clsStr);
 	}
-        
+    
+	/**
+	 * Converts the provided Mule Message object and stores it 
+	 * in the provided env object for use by the script inside the 
+	 * cali-lang interpreter.
+	 * @param env is the CaliObject with the env instance.
+	 * @param message is the Mule Message to convert.
+	 */
     private void convertMessage(CaliObject env, Message message) {
     	// Payload
       	CaliMap payloadMap = new CaliMap();
@@ -306,6 +377,13 @@ public class CaliLangMule extends Engine {
       	env.addMember("attributes", attrMap);
     }
     
+    /**
+     * Converts the provided Mule variable Map and stores it 
+	 * in the provided env object for use by the script inside the 
+	 * cali-lang interpreter.
+     * @param env is the CaliObject with the env instance.
+     * @param variables is the Mule variable Map to convert.
+     */
     private void convertVariables(CaliObject env, Map<String, Object> variables) {
   	  env.getMembers().getMap().put("variables", MuleToCaliConverter.convert(variables));
     }

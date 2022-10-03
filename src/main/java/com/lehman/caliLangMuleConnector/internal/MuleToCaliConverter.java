@@ -33,7 +33,18 @@ import com.cali.types.CaliNull;
 import com.cali.types.CaliString;
 import com.cali.types.CaliType;
 
+/**
+ * Class with support to convert Mule objects to Cali-Lang objects.
+ * @author Austin Lehman
+ */
 public class MuleToCaliConverter {
+	
+	/**
+	 * Static function that converts the provided Mule object 
+	 * to a Cali-Lang one for use in the script.
+	 * @param val is a Mule object to converver.
+	 * @return A CaliType object with the converted data.
+	 */
 	public static CaliType convert(Object val) {
 		  CaliType ret = new CaliString("");
 		  

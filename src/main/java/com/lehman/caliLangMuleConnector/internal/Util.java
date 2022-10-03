@@ -26,7 +26,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+/**
+ * Utility class.
+ * @author Austin Lehman
+ */
 public class Util {
+	/**
+	 * Loads the file with the provided resource name from 
+	 * the application JAR.
+	 * @param Resource is a String with the resource to load.
+	 * @return A String with the file contents.
+	 * @throws IOException
+	 */
 	public static String loadFile(String Resource) throws IOException {
 		ClassLoader classLoader = Util.class.getClassLoader();
 		URL resource = classLoader.getResource(Resource);

@@ -33,10 +33,14 @@ import org.mule.runtime.extension.api.annotation.param.display.Summary;
 
 
 /**
- * This class is a container for operations, every public method in this class will be taken as an extension operation.
+ * This class provides the extension operations. This is the entry point 
+ * for calling the extension functions.
  */
 public class CalilangmuleOperations {
-  // Access the config
+  /**
+   * Access the config. We need this to make requests to read 
+   * config properties.
+   */
   @Inject
   private ConfigurationProperties configurationProperties;
   
@@ -44,7 +48,7 @@ public class CalilangmuleOperations {
    * Executes the Cali-Lang script.
    * @param scriptFileName is a String with the cali script file to execute.
    * @return A JSON string with the result.
- * @throws Exception 
+   * @throws Exception 
    */
   @Summary("Cali-Lang transform connector.")
   @MediaType(value = APPLICATION_JSON, strict = false)

@@ -18,6 +18,8 @@
 package com.lehman.caliLangMuleConnector.internal;
 
 public class CaliLangException extends Exception {
+	private static final long serialVersionUID = 5660955857525578240L;
+
 	public CaliLangException(String Message) {
 		super(Message);
 	}
