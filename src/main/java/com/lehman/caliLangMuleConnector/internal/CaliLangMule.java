@@ -96,6 +96,9 @@ public class CaliLangMule extends Engine {
 			Map<String, Object> Vars,
 			String LoggerStr
 		) throws Exception {
+		// Set the security manager.
+		super(new CaliLangSecurityManager());
+		
 		this.scriptFileName = ScriptFileName;
 		this.setDebug(true);
 		this.addIncludePath("./");
@@ -164,6 +167,8 @@ public class CaliLangMule extends Engine {
             app = (CaliObject)tci;
             this.setupLogger(tenv);
             this.setupEnv(tenv);
+            this.addHttp();
+            this.addJdbc();
             tenv.setClassInstance(app);
         } else {
             CaliException ex = (CaliException)tci;
@@ -327,6 +332,7 @@ public class CaliLangMule extends Engine {
 			+ "	public attributes = {};" + "\n"
 			+ "	public variables = {};" + "\n"
 			+ "	public extern p(string prop);" + "\n"
+			+ "	public extern loadResource(string resource);" + "\n"
 			+ "	public toString() {" + "\n"
 			+ "		rstr = 'attributes:\\n';" + "\n"
 			+ "		rstr += this.attributes + '\\n';" + "\n"
@@ -340,6 +346,41 @@ public class CaliLangMule extends Engine {
 		;
 		
 		this.parseString("env.ca", clsStr);
+	}
+	
+	/**
+	 * Adds HTTP object support to the connector.
+	 * @throws Exception
+	 */
+	private void addHttp() throws Exception {
+		String clsStr = ""
+			+ "extern class http : com.lehman.caliLangMuleConnector.internal.Http {" + "\n"
+			+ "	public extern get(string Url);" + "\n"
+			+ "	public extern post(string Url, string Content, string MediaType = \"application/json; charset=utf-8\");" + "\n"
+			+ "}" + "\n"
+		;
+		this.parseString("http.ca", clsStr);
+	}
+	
+	/**
+	 * Adds JDBC object support to the connector.
+	 * @throws Exception
+	 */
+	private void addJdbc() throws Exception {
+		String clsStr = ""
+			+ "extern class jdbc : com.lehman.caliLangMuleConnector.internal.Jdbc {" + "\n"
+			+ "	public extern setDriver(string Driver);" + "\n"
+			+ "	public extern setUrl(string Url);" + "\n"
+		    + "	public extern setUserName(string UserName);" + "\n"
+		    + "	public extern setPassword(string Password);" + "\n"
+		    + "	public extern setConnectionInfo(string Driver, string Url, string UserName, string Password);" + "\n"
+		    + "	public extern select(string Query, list Params = []);" + "\n"
+		    + "	public extern update(string Query, list Params = []);" + "\n"
+		    + "	public extern connect();" + "\n"
+		    + "	public extern disconnect();" + "\n"
+			+ "}" + "\n"
+		;
+		this.parseString("http.ca", clsStr);
 	}
     
 	/**

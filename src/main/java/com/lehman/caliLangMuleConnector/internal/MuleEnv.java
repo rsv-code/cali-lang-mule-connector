@@ -17,12 +17,14 @@
 
 package com.lehman.caliLangMuleConnector.internal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import org.mule.runtime.api.component.ConfigurationProperties;
 
 import com.cali.Environment;
+import com.cali.types.CaliException;
 import com.cali.types.CaliString;
 import com.cali.types.CaliType;
 
@@ -73,5 +75,25 @@ public class MuleEnv {
 			}
 		}
 		return new CaliString(ret);
+	}
+	
+	/**
+	 * This is the implementation of env.loadResource() which loads a file from 
+	 * the src/main/resources directory in the app.
+	 * @param env is the cali-lang Environment object.
+	 * @param args is an ArrayList with the function args.
+	 * @return A CaliType object of type CaliString with the 
+	 * loaded resource.
+	 * @throws IOException
+	 */
+	public CaliType loadResource(Environment env, ArrayList<CaliType> args) {
+		CaliString resource = (CaliString) args.get(0);
+		String res;
+		try {
+			res = Util.loadFile(resource.getValue());
+		} catch (IOException e) {
+			return new CaliException(e.getMessage());
+		}
+		return new CaliString(res);
 	}
 }

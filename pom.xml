@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.rsv-code</groupId>
 	<artifactId>cali-lang-mule-connector</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>mule-extension</packaging>
 	
 	<name>Cali-lang-mule-Extension</name>
@@ -97,7 +97,18 @@
 		    <version>4.13.2</version>
 		    <scope>test</scope>
 		</dependency>
-		
+		<dependency>
+		  <groupId>org.mule.connectors</groupId>
+		  <artifactId>mule-http-connector</artifactId>
+		  <version>1.7.1</version>
+		  <classifier>mule-plugin</classifier>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.2</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>

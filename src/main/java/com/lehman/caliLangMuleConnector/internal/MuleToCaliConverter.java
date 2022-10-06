@@ -18,9 +18,9 @@
 package com.lehman.caliLangMuleConnector.internal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
+import org.mule.extension.http.api.HttpRequestAttributes;
 import org.mule.runtime.api.metadata.TypedValue;
 import org.mule.runtime.core.api.util.CaseInsensitiveHashMap;
 
@@ -48,9 +48,9 @@ public class MuleToCaliConverter {
 	public static CaliType convert(Object val) {
 		  CaliType ret = new CaliString("");
 		  
-		  if (val instanceof HashMap) {
+		  if (val instanceof Map) {
 			  CaliMap m = new CaliMap();
-			  LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)val;
+			  Map<String, Object> map = (Map<String, Object>)val;
 			  for (String key : map.keySet()) {
 				  Object tval = map.get(key);
 				  m.put(key, convert(tval));
@@ -84,10 +84,58 @@ public class MuleToCaliConverter {
 		  } else if (val instanceof TypedValue) {
 			  TypedValue<Object> tval = (TypedValue<Object>)val;
 			  ret = convert(tval.getValue());
+		  } else if (val instanceof HttpRequestAttributes) {
+			  ret = mapHttpReqAttr((HttpRequestAttributes) val);
 		  } else {
 			  ret = new CaliString("Unknown type found: [" + val.getClass() + "] value: " + val.toString());
 		  }
 		  
 		  return ret;
 	  }
+	
+	/**
+	 * Maps the Mule HttpRequestAttributes object to a Cali-Lang map.
+	 * @param attr is the Mule HttpRequestAttributes object to map from.
+	 * @return A CaliMap object with the result.
+	 */
+	public static CaliType mapHttpReqAttr(HttpRequestAttributes attr) {
+		CaliMap ret = new CaliMap();
+		
+		CaliMap headers = new CaliMap();
+		for (String key : attr.getHeaders().keySet()) {
+			headers.put(key, new CaliString(attr.getHeaders().get(key)));
+		}
+		ret.put("headers", headers);
+		
+		CaliMap queryParams = new CaliMap();
+		for (String key : attr.getQueryParams().keySet()) {
+			queryParams.put(key, new CaliString(attr.getQueryParams().get(key)));
+		}
+		ret.put("queryParams", queryParams);
+		
+		CaliMap uriParams = new CaliMap();
+		for (String key : attr.getUriParams().keySet()) {
+			uriParams.put(key, new CaliString(attr.getUriParams().get(key)));
+		}
+		ret.put("uriParams", uriParams);
+		
+		ret.put("requestPath", new CaliString(attr.getRequestPath()));
+		ret.put("listenerPath", new CaliString(attr.getListenerPath()));
+		ret.put("rawRequestPath", new CaliString(attr.getRawRequestPath()));
+		ret.put("relativePath", new CaliString(attr.getRelativePath()));
+		ret.put("maskedRequestPath", new CaliString(attr.getMaskedRequestPath()));
+		ret.put("version", new CaliString(attr.getVersion()));
+		ret.put("scheme", new CaliString(attr.getScheme()));
+		ret.put("method", new CaliString(attr.getMethod()));
+		ret.put("requestUri", new CaliString(attr.getRequestUri()));
+		ret.put("rawRequestUri", new CaliString(attr.getRawRequestUri()));
+		ret.put("queryString", new CaliString(attr.getQueryString()));
+		ret.put("localAddress", new CaliString(attr.getLocalAddress()));
+		ret.put("remoteAddress", new CaliString(attr.getRemoteAddress()));
+		if (attr.getClientCertificate() != null) {
+			ret.put("clientCertificate", new CaliString(attr.getClientCertificate().toString()));
+		}
+		
+		return ret;
+	}
 }
