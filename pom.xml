@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.rsv-code</groupId>
 	<artifactId>cali-lang-mule-connector</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<packaging>mule-extension</packaging>
 	
 	<name>Cali-lang-mule-Extension</name>

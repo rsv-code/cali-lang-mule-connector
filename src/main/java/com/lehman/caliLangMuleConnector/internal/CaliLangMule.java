@@ -107,6 +107,10 @@ public class CaliLangMule extends Engine {
 		this.message = Mess;
 		this.variables = Vars;
 		this.loggerStr = LoggerStr;
+		
+		// Add include classes.
+		Lang.get().langIncludes.put("http.ca", this.getHttpInclude());
+		Lang.get().langIncludes.put("jdbc.ca", this.getJdbcInclude());
 	}
 
 	/**
@@ -167,8 +171,6 @@ public class CaliLangMule extends Engine {
             app = (CaliObject)tci;
             this.setupLogger(tenv);
             this.setupEnv(tenv);
-            this.addHttp();
-            this.addJdbc();
             tenv.setClassInstance(app);
         } else {
             CaliException ex = (CaliException)tci;
@@ -349,24 +351,22 @@ public class CaliLangMule extends Engine {
 	}
 	
 	/**
-	 * Adds HTTP object support to the connector.
-	 * @throws Exception
+	 * Gets the HTTP include class.
 	 */
-	private void addHttp() throws Exception {
+	private String getHttpInclude() {
 		String clsStr = ""
 			+ "extern class http : com.lehman.caliLangMuleConnector.internal.Http {" + "\n"
 			+ "	public extern get(string Url);" + "\n"
 			+ "	public extern post(string Url, string Content, string MediaType = \"application/json; charset=utf-8\");" + "\n"
 			+ "}" + "\n"
 		;
-		this.parseString("http.ca", clsStr);
+		return clsStr;
 	}
 	
 	/**
-	 * Adds JDBC object support to the connector.
-	 * @throws Exception
+	 * Gets the JDBC include class.
 	 */
-	private void addJdbc() throws Exception {
+	private String getJdbcInclude() {
 		String clsStr = ""
 			+ "extern class jdbc : com.lehman.caliLangMuleConnector.internal.Jdbc {" + "\n"
 			+ "	public extern setDriver(string Driver);" + "\n"
@@ -380,7 +380,7 @@ public class CaliLangMule extends Engine {
 		    + "	public extern disconnect();" + "\n"
 			+ "}" + "\n"
 		;
-		this.parseString("http.ca", clsStr);
+		return clsStr;
 	}
     
 	/**

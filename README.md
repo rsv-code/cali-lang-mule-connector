@@ -15,7 +15,7 @@ a "Cali-Lang" module within the Mule Palette. You can then drag and drop the
 ```
 <groupId>io.github.rsv-code</groupId>
   <artifactId>cali-lang-mule-connector</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
 <classifier>mule-plugin</classifier>
 ```
 
@@ -31,6 +31,76 @@ script file you want to run.
 Optionally you can also set the Logger name. If you setup a logger in
 log4j2.xml you can provide the name in this field and any log statements you
 make in the cali-lang scripts will use this logger.
+
+## Available Objects
+
+Along with the default language objects that can be found in [the standard
+documentation](https://github.com/cali-lang/cali.lang.base/wiki) the following
+objects are available in the mule connector.
+
+#### env
+
+The env object is a mule specific static global object that can be used anywhere.
+It contains the flow variables, attributes, and payload. It also contains a number
+of useful functions.
+
+**Objects available in env:**
+```
+env.payload - A map which contains the payload information.
+env.variables - A map which contains the flow variables.
+env.attributes - A map which contains the flow attributes.
+```
+
+**Functions available in env:**
+```
+env.p("propName") - Gets the property value with the provided property name.
+env.loadResource("resource.json") - Loads a resource from the application
+src/main/resources directory and returns it as a string.
+env.toString() - Returns a string representation of attributes, variables,
+and payload.
+```
+
+### http
+
+The http object provides basic HTTP request support.
+
+**Functions available in http:**
+```
+// Include the http library.
+include http;
+
+// Create a new object.
+con = new http();
+
+// Use the object.
+con.get(string Url) - Makes a HTTP GET request with the provided URL.
+con.post(string Url, string Content, string MediaType = "application/json; charset=utf-8") - Makes a HTTP POST request with the provided arguments. The MediaType argument is
+optional and if not set defaults to application/json; charset=utf-8.
+```
+
+### jdbc
+
+The jdbc object provides Java JDBC relational database support.
+
+***Functions available in jdbc:**
+```
+// Include the jdbc library.
+include jdbc;
+
+// Create a new object.
+con = new jdbc();
+
+// Use the object.
+con.setDriver(string Driver) - Sets the driver string.
+con.setUrl(string Url) - Sets the connection URL.
+con.setUserName(string UserName) - Sets the connection user name.
+con.setPassword(string Password) - Sets the connection password.
+con.setConnectionInfo(string Driver, string Url, string UserName, string Password) - Sets all of the connection information.
+con.select(string Query, list Params = []) - Executes a select query.
+con.update(string Query, list Params = []) - Executes a update query.
+con.connect() - Establishes a DB connection.
+con.disconnect() - Terminates a DB connection.
+```
 
 ## Installing the dependency locally
 
