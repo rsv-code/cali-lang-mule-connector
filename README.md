@@ -32,6 +32,19 @@ Optionally you can also set the Logger name. If you setup a logger in
 log4j2.xml you can provide the name in this field and any log statements you
 make in the cali-lang scripts will use this logger.
 
+## Hello World
+
+Here's some basic code to get you started.
+
+```
+class helloWorld {
+  public main() {
+    return "hello world";
+  }
+}
+```
+
+
 ## Available Objects
 
 Along with the default language objects that can be found in [the standard
