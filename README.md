@@ -82,7 +82,7 @@ optional and if not set defaults to application/json; charset=utf-8.
 
 The jdbc object provides Java JDBC relational database support.
 
-***Functions available in jdbc:**
+**Functions available in jdbc:**
 ```
 // Include the jdbc library.
 include jdbc;
