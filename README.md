@@ -44,6 +44,10 @@ class helloWorld {
 }
 ```
 
+## Demo Application
+
+If you'd like to test out an existing demo application download and import the [calilangmuletest](https://github.com/rsv-code/calilangmuletest). This minimal app will provide a basic getting started experience.
+
 
 ## Available Objects
 
